@@ -1,9 +1,28 @@
 #include <Arduino.h>
+#include "getID.h"
+
+#define GET_ID 1
 
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  
+  #if GET_ID
+    setupID();
+  #else
+    // My code
+  #endif
+
+  delay(500);
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
+  #if GET_ID
+    loopID();
+  #else
+    Serial.println("Hello World!");
+  #endif
+  
+  delay(900);
 }
