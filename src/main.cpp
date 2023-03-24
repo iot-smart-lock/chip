@@ -29,6 +29,10 @@
 //====================================================================================================================================
 #include "userdefines.h"
 
+//BLE
+//====================================================================================================================================
+#include "ble.h"
+
 //====================================================================================================================================
 #include <Arduino.h>
 #include <U8x8lib.h>
@@ -184,6 +188,12 @@ void setup()
 
   // init LoRa
      lorawan_setup();
+
+  //init BLE
+  Serial.println("Starting BLE");
+  ble_setup();
+  Serial.println("BLE should be ready to go");
+
 } // end of setup
 
 
@@ -288,5 +298,10 @@ void loop()
     sendData2TTN(1,tx_payload);
     delay(200);
   }
+
+  //BLE Connection
+  // if(connection) {
+  //   Serial.printf("BLE-Device Connected");
+  // }
 
 }
