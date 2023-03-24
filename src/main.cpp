@@ -41,11 +41,10 @@ static unsigned long transmission_timestamp = millis();
 // T-Beam specific hardware
 // #define BUILTIN_LED 21
 
-// this is my ttgo t-beam board
-// #define SERIAL1_RX 34  // GPS_RX -> 12
-#define SERIAL1_RX 12  // GPS_RX -> 12
-// #define SERIAL1_TX 12  // GPS_TX -> 15
-#define SERIAL1_TX 15  // GPS_TX -> 15
+// Configuration for the GPS ports
+#define SERIAL1_RX 34  // GPS_RX -> 12
+#define SERIAL1_TX 12  // GPS_TX -> 15
+
 String read_sentence;
 
 int Nmea = 0; // indicator which data from gps module will be sent - 0 means invalid data
@@ -229,17 +228,24 @@ void loop()
       Serial.print(altitude);
       Serial.print("  satalites = ");
       Serial.println(satalites);
+    } else {
+      gps_lat = "4840.74971";
+      gps_lon = "00854.16609";
+      gps_sat = "05";
+      gps_hgt = "453.2";
+      gps_lat_o = "N";
+      gps_lon_o = "E";
     }
     
   } else {
     // in the real app - just send data only GPS is available
     // no gps signal - for test purpose send dummy values
-    gps_lat = "4840.74971";
-    gps_lon = "00854.16609";
-    gps_sat = "05";
-    gps_hgt = "453.2";
-    gps_lat_o = "N";
-    gps_lon_o = "E";
+    // gps_lat = "4840.74971";
+    // gps_lon = "00854.16609";
+    // gps_sat = "05";
+    // gps_hgt = "453.2";
+    // gps_lat_o = "N";
+    // gps_lon_o = "E";
     Nmea = 0;
   }
 
@@ -266,12 +272,6 @@ void loop()
       Serial.println(longitude,8); 
     }
     else {
-      gps_lat = "4840.74971";
-      gps_lon = "00854.16609";
-      gps_sat = "05";
-      gps_hgt = "453.2";
-      gps_lat_o = "N";
-      gps_lon_o = "E";
       Nmea = 0;
       // invalid GPRMC data 
     }
