@@ -1,9 +1,8 @@
 #include "ble.h"
 #include <Arduino.h>
 
-#define OPEN 0x01
-#define LOCKED 0x02
-#define TEST 0xFF
+#define OPEN 0x00
+#define LOCKED 0x01
 
 bool locked = false;
 BLEServer *pServer = NULL;
