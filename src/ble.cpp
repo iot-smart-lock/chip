@@ -37,10 +37,12 @@ class serverOperationCallbacks: public BLECharacteristicCallbacks {
             handleCommand(command);
         }
     }
+
+    
 };
 
 void ble_setup() {
-    BLEDevice::init("TTGO T-Beam");
+    BLEDevice::init("SmartLock");
     BLEServer *pServer = BLEDevice::createServer();
     pServer -> setCallbacks(new serverCallbacks());
     BLEService *pService = pServer -> createService(SERVICE_UUID);
@@ -50,7 +52,7 @@ void ble_setup() {
                                                                           BLECharacteristic::PROPERTY_NOTIFY | 
                                                                           BLECharacteristic::PROPERTY_INDICATE
                                                                           );
-    pCharacteristic -> setValue("TTGO T-Beam");
+    pCharacteristic -> setValue("SmartLock");
     pCharacteristic -> setCallbacks(new serverOperationCallbacks());
     pService -> start();
     BLEAdvertising *pAdvertising = pServer -> getAdvertising();
