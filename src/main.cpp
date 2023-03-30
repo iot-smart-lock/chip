@@ -201,8 +201,8 @@ void loop()
    // read the serial data from GPS Module
   read_sentence = Serial1.readStringUntil(13); //13 = return (ASCII)
   read_sentence.trim();
-  Serial.print("read-sentence: ");
-  Serial.println(read_sentence);
+  // Serial.print("read-sentence: ");
+  // Serial.println(read_sentence);
   
   if (read_sentence.startsWith("$GPGGA")) {
     String gps_lat = sentence_sep(read_sentence, 2); //Latitude in degrees & minutes
@@ -239,12 +239,12 @@ void loop()
       Serial.print("  satalites = ");
       Serial.println(satalites);
     } else {
-      gps_lat = "4840.74971";
-      gps_lon = "00854.16609";
-      gps_sat = "05";
-      gps_hgt = "453.2";
-      gps_lat_o = "N";
-      gps_lon_o = "E";
+      // gps_lat = "4840.74971";
+      // gps_lon = "00854.16609";
+      // gps_sat = "05";
+      // gps_hgt = "453.2";
+      // gps_lat_o = "N";
+      // gps_lon_o = "E";
     }
     
   } else {
@@ -291,7 +291,7 @@ void loop()
 
   //Serial.println("Sending to TTN ...");
   if ((millis() - transmission_timestamp) >= (TTN_MESSAGING_INTERVAL * 1000)) {
-    Serial.printf("Payload: %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", tx_payload[0], tx_payload[1], tx_payload[2], tx_payload[3], tx_payload[4], tx_payload[5], tx_payload[6], tx_payload[7], tx_payload[8], tx_payload[9], tx_payload[10], tx_payload[11]);
+    // Serial.printf("Payload: %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", tx_payload[0], tx_payload[1], tx_payload[2], tx_payload[3], tx_payload[4], tx_payload[5], tx_payload[6], tx_payload[7], tx_payload[8], tx_payload[9], tx_payload[10], tx_payload[11]);
     //DisplayGMC(100,200,300,true,false);
     transmission_timestamp=millis();
     Serial.println("Sending to TTN ...");

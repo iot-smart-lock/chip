@@ -1,27 +1,27 @@
 #include "ble.h"
 #include <Arduino.h>
 
-class serverCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer *pServer) {
-        Serial.println("BLE-Device connected");
-    };
+#define OPEN 0x00
+#define LOCKED 0x01
 
-    void onDisconnect(BLEServer *pServer) {
-        Serial.println("BLE-Device disconnected");
-    }
-};
-
+bool locked = false;
+BLEServer *pServer = NULL;
 
 void handleCommand(char *command) {
     Serial.print("Command = ");
     Serial.println(command);
 
-    if (command[0] == 'L') {
+    if (command[0] == LOCKED) {
+        locked = true;
         Serial.println("Add code for BLE-Action aka. make LED on");
+    }
+    else if (command[0] == OPEN) {
+        locked = false;
+        Serial.println("Add code for BLE-Action aka. make LED off");
     }
     else {
         Serial.print("Unknown command: ");
-        Serial.println(command[0]);
+        Serial.println(command);
     }
 }
 
@@ -37,11 +37,46 @@ class serverOperationCallbacks: public BLECharacteristicCallbacks {
             handleCommand(command);
         }
     }
+
+    void onRead(BLECharacteristic *pCharacteristic) {
+        std::string value;
+        if (locked) {
+            value[0] = LOCKED;
+        }
+        else {
+            value[0] = OPEN;
+        }
+        Serial.printf("onRead: %s", value.c_str());
+        // pCharacteristic->setValue(value); //TODO: Doesn't work
+    }
+};
+
+void advertise() {
+    if (pServer == NULL) {
+       return;
+    }
+    BLEAdvertising *pAdvertising = pServer -> getAdvertising();
+    pAdvertising -> addServiceUUID(SERVICE_UUID);
+    pAdvertising -> setScanResponse(true);
+    pAdvertising -> setMinPreferred(0x06);
+    pAdvertising -> setMinPreferred(0x12);
+    pAdvertising -> start();
+}
+
+class serverCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer *pServer) {
+        Serial.println("BLE-Device connected");
+    };
+
+    void onDisconnect(BLEServer *pServer) {
+        Serial.println("BLE-Device disconnected");
+        advertise();
+    }
 };
 
 void ble_setup() {
     BLEDevice::init("TTGO T-Beam");
-    BLEServer *pServer = BLEDevice::createServer();
+    pServer = BLEDevice::createServer();
     pServer -> setCallbacks(new serverCallbacks());
     BLEService *pService = pServer -> createService(SERVICE_UUID);
     BLECharacteristic *pCharacteristic = pService -> createCharacteristic(CHARACTERISTIC_UUID,
@@ -53,10 +88,5 @@ void ble_setup() {
     pCharacteristic -> setValue("TTGO T-Beam");
     pCharacteristic -> setCallbacks(new serverOperationCallbacks());
     pService -> start();
-    BLEAdvertising *pAdvertising = pServer -> getAdvertising();
-    pAdvertising -> addServiceUUID(SERVICE_UUID);
-    pAdvertising -> setScanResponse(true);
-    pAdvertising -> setMinPreferred(0x06);
-    pAdvertising -> setMinPreferred(0x12);
-    pAdvertising -> start();
+    advertise();
 }
