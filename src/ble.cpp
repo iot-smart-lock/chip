@@ -1,8 +1,9 @@
 #include "ble.h"
 #include <Arduino.h>
 
-#define OPEN 0x00
-#define LOCKED 0x01
+#define OPEN 0x01
+#define LOCKED 0x02
+#define TEST 0xFF
 
 bool locked = false;
 BLEServer *pServer = NULL;
@@ -47,7 +48,8 @@ class serverOperationCallbacks: public BLECharacteristicCallbacks {
             value[0] = OPEN;
         }
         Serial.printf("onRead: %s", value.c_str());
-        // pCharacteristic->setValue(value); //TODO: Doesn't work
+        Serial.println("");
+        pCharacteristic->setValue(value.c_str());
     }
 };
 
