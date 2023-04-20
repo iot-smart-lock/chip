@@ -13,11 +13,13 @@ void handleCommand(char *command) {
 
     if (command[0] == LOCKED) {
         locked = true;
-        Serial.println("Add code for BLE-Action aka. make LED on");
+        digitalWrite(14, HIGH);   // turn the LED on (HIGH is the voltage level)
+        Serial.println("LED ON"); 
     }
     else if (command[0] == OPEN) {
         locked = false;
-        Serial.println("Add code for BLE-Action aka. make LED off");
+        digitalWrite(14, LOW);   // turn the LED on (HIGH is the voltage level)
+        Serial.println("LED OFF");  
     }
     else {
         Serial.print("Unknown command: ");

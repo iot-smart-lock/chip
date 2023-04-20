@@ -193,6 +193,9 @@ void setup()
   ble_setup();
   Serial.println("BLE should be ready to go");
 
+  pinMode(14, OUTPUT);
+  digitalWrite(14, LOW);
+
 } // end of setup
 
 
@@ -298,10 +301,4 @@ void loop()
     sendData2TTN(1,tx_payload);
     delay(200);
   }
-
-  //BLE Connection
-  // if(connection) {
-  //   Serial.printf("BLE-Device Connected");
-  // }
-
 }
